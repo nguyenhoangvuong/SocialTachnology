@@ -146,13 +146,13 @@
             <div class="col-xl-4 order-xl-2 mt-3">
                 <div class="card-profile">
                     <a href="#!" data-toggle="modal" data-target="#changeCoverImage">
-                        <img src="~/Image/Users/@user.user_coverImage" height="250" alt="Image placeholder" class="card-img-top">
+                        <img src="~/Image/Users/@user.user_coverImage" alt="Image placeholder" class="card-img-top">
                     </a>
                     <div class="row justify-content-center">
                         <div class="col-lg-3 order-lg-2">
                             <div class="card-profile-image">
                                 <a href="#!" data-toggle="modal" data-target="#changeAvata">
-                                    <img src="~/Image/Users/@user.user_avatar" width="150" height="150" class="rounded-circle" />
+                                    <img src="~/Image/Users/@user.user_avatar" class="rounded-circle" />
                                 </a>
                             </div>
                         </div>
@@ -256,9 +256,9 @@
                             <div class="h5 font-weight-300">
 
                                 <i class="ni location_pin mr-2"></i>
-                                <span style="padding:1%;font-size:15px">@user.user_phone</span>
+                                <span style="padding:1%">@user.user_phone</span>
                             </div>
-                            <div class="h5 mt-3" style="font-size:15px">
+                            <div class="h5 mt-4">
                                 <i class="ni business_briefcase-24 mr-2"></i><i class="fas fa-envelope-open-text"></i>&nbsp; Email : @user.user_email
                             </div>
 
@@ -595,7 +595,7 @@
                                             <form action="@Url.Action("Address","Account")" method="post">
                                                 @Html.AntiForgeryToken()
                                                 <div class="form-group label-floating">
-                                                    <label class="control-label">TP hoặc (Tỉnh)</label>
+                                                    <label class="control-label">TP or (Tỉnh..)</label>
                                                     @{
                                                         List<Provincial> provincials = db.Provincials.Where(n => n.provincial_activate == true && n.provincial_recycleBin == false).ToList();
                                                     }
@@ -607,7 +607,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group label-floating">
-                                                    <label class="control-label">Quận hoặc (Huyện)</label>
+                                                    <label class="control-label">Quận or (Huyện..)</label>
                                                     <select class="form-control" name="district_id" style="width:100%" id="district">
                                                         @if (user.district_id != null)
                                                         {

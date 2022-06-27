@@ -1,9 +1,9 @@
-﻿
+﻿@model List<Post>
 @{
     ViewBag.Title = "ManagementPost";
     Layout = "~/Views/Shared/_LayoutCenter.cshtml";
 }
-
+@using FivePSocialNetwork.Models;
 <div class="header bg-primary pb-6">
     <div class="container-fluid">
         <div class="header-body">
@@ -130,24 +130,27 @@
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col" class="sort" data-sort="name">Tiêu đề</th>
-                                <th scope="col" class="sort border-left" data-sort="budget">Trả lời</th>
-                                <th scope="col" class="sort" data-sort="status">Đánh giá</th>
+                                <th scope="col" class="sort border-left" data-sort="budget">Lượt Like</th>
+                                <th scope="col" class="sort" data-sort="status">Lượt DisLike</th>
                                 <th scope="col"> Lượt xem</th>
                                 <th scope="col" class="sort" data-sort="completion"> Trạng thái</th>
                                 <th scope="col"> Tùy chọn</th>
                             </tr>
                         </thead>
                         <tbody class="list">
-
+                            @foreach (var item in Model)
+                            {
                             <tr>
                                 <td scope="row">
                                     <div class="media align-items-center">
                                         <a class="mr-2">
 
-                                            <center><i class="fa fa-chevron-up" style="font-size:200%"></i></center>
+                                            <center>
+                                                <i class="fa fa-chevron-up" style="font-size:200%"></i>
+
+                                            </center>
                                             <center>
 
-                                                ..
                                             </center>
                                             <center><i class="fa fa-chevron-down" style="font-size:200%"></i></center>
 
@@ -158,7 +161,7 @@
                                                 ...
                                             </div>
                                             <span class="name mb-0 text-sm">
-                                                ...
+                                                @item.post_title;
                                             </span>
 
                                             <div class="d-flex align-items-center">
@@ -177,19 +180,28 @@
                                     </div>
                                 </td>
                                 <td class="budget border-left">
-                                    <i class="fas fa-reply"></i> ..
+                                    <i class="far fa-thumbs-up" style="font-size:150%;"> </i> @item.Rate_Post.Where(X => X.ratePost_rateStatus == true).Count()
                                 </td>
                                 <td class="budget">
-                                    <i class="far fa-star"></i> ..
-                                </td>
+                                    <i class="far fa-thumbs-down" style="font-size:150%;"></i> @item.Rate_Post.Where(X => X.ratePost_rateStatus == false).Count()
+</td>
                                 <td class="budget">
-                                    <i class="far fa-eye"></i> ..
+                                    <i class="far fa-eye"></i> @item.post_view
                                 </td>
 
 
                                 <td>
                                     <label class="custom-toggle">
-                                        <input type="checkbox">
+                                        @{ if (item.post_admin_recycleBin == true)
+                                            {
+                                                <input id="@item.post_id"  name="form-check" checked type="checkbox">
+                                            }
+                                            else
+                                            {
+                                                <input id="@item.post_id" name="form-check"  type="checkbox">
+
+                                            } }
+
                                         <span class="custom-toggle-slider rounded-circle"></span>
                                     </label>
                                 </td>
@@ -199,13 +211,15 @@
                                             <i class="fas fa-ellipsis-v"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                            <a class="dropdown-item" href="@Url.Action("IndexDetailQuestion","DetailQuestion")"><i class="fas fa-info-circle"></i> Chi tiết</a>
-                                            <a class="dropdown-item" href="@Url.Action("RecycleBinPost","Display")"><i class="far fa-trash-alt"></i> Xóa</a>
-                                            <a class="dropdown-item" href="@Url.Action("IndexPostQuestion","PostQuestion")"><i class="fas fa-edit"></i>Sữa</a>
+                                            <a class="dropdown-item" href="@Url.Action("PostDetail/"+item.post_id,"View")"><i class="fas fa-info-circle"></i> Chi tiết</a>
+                                            <a class="dropdown-item" href="@Url.Action("DeletePost/"+item.post_id,"View")"><i class="far fa-trash-alt"></i> Xóa</a>
+                                            <a class="dropdown-item" href="@Url.Action("EditPost","PostQuestion")"><i class="fas fa-edit"></i>Sữa</a>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
+
+                            }
 
                         </tbody>
                     </table>
@@ -229,5 +243,20 @@
                 // Second function handles error
                 $scope.listMember = "Something went wrong";
             });
+    });
+    $(document).ready(function () {
+        $(document).on('click', "input[name = 'form-check']", function () {
+
+            $.ajax({
+                url: '/UserManagement/UpdateStatus/' + this.id,
+                type: 'Post',
+                datatype: 'json',
+                data: { Status: this.checked},
+                success: function (data) {
+                  
+                }
+            });
+            });
+
     });
 </script>

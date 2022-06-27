@@ -76,7 +76,7 @@ namespace FivePSocialNetwork.Areas.Admin.Controllers
                 user_lastName = db.Users.Find(n.user_id).user_lastName,
                 post_title = n.post_title.ToString(),
                 post_totalLike = n.post_totalLike,
-                post_content = n.post_content,
+                post_content = n.post_content,  
             }).ToList();
             return Json(listQuestions, JsonRequestBehavior.AllowGet);
         }

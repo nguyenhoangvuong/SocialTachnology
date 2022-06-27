@@ -91,9 +91,10 @@ namespace FivePSocialNetwork.Controllers
                         post_id = id,
                         user_id = user_id,
                         ratePost_dateCreate = DateTime.Now,
-                       ratePost_rateStatus = false
+                       ratePost_rateStatus = false,
+                   
 
-                };
+                    };
                     db.Rate_Post.Add(Post);
                     db.SaveChanges();
                 }
@@ -146,9 +147,9 @@ namespace FivePSocialNetwork.Controllers
         {
             // khi tồn tại cookies
             // khi tồn tại cookies
-            int user_id = int.Parse(Request.Cookies["user_id"].Value.ToString());
-            ViewBag.UseId = user_id;
-                return View(db.Posts.Where(x=>x.post_activate!=false && x.post_admin_recycleBin!=true).OrderBy(x=>x.post_id).ToList());
+            //int user_id = int.Parse(Request.Cookies["user_id"].Value.ToString());
+            //ViewBag.UseId = user_id;
+                return View(db.Posts.Where(x=>x.post_activate!=false && x.post_recycleBin!=true && x.post_admin_recycleBin==true ).OrderBy(x=>x.post_id).ToList());
         }
         // ------------------------------------------------danh sách bài viết------------------------------------------------
         public JsonResult ListPost()

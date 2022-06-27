@@ -593,9 +593,20 @@ namespace FivePSocialNetwork.Controllers
         //---------------------------------------------user quản lý các bài viết--------------------------------
         public ActionResult ManagementPost()
         {
-            return View();
+            int user_id = int.Parse(Request.Cookies["user_id"].Value.ToString());
+           var Posts = db.Posts.Where(x => x.post_recycleBin !=true && x.user_id ==user_id).OrderBy(x => x.post_id).ToList();
+            return View(Posts);
         }
-        public JsonResult ListPost()
+
+        [HttpPost]
+        public JsonResult UpdateStatus(long id, bool Status)
+        {
+            var a = db.Posts.Find(id);
+            a.post_admin_recycleBin = Status;
+            db.SaveChanges();
+         return Json( JsonRequestBehavior.AllowGet);
+    }
+            public JsonResult ListPost()
         {
             List<User> users = db.Users.Where(n => n.user_activate == true && n.user_recycleBin == false && n.role_id == 1).ToList();
             List<ListUsers> listUsers = users.Select(n => new ListUsers
