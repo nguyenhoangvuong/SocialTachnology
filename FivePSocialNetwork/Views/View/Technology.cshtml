@@ -55,27 +55,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-5 text-right">
-                    <div class="">
-                        <a class="#"><i class="far fa-snowflake text-white"></i> Hot</a> /
-                        <a class="#">Nhiều thành viên</a> /
-                        <a class="#">Hỏi nhiều</a>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="col-xl-12 mt--3">
             <div class="row" id="AllQuestionPage">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 same" ng-repeat="x in filteredTodos| filter: txtSearch">
-
-                    <div class="text-left border" style="background-color:#f8f9fe;padding:10px">
-
+                    <div class="text-left border bg-white" style="padding: 10px; box-shadow:2px 3px 4px #ebe6e6">
                         <div class="title">
                             <a ng-href="/Center/ShowFollowTechnology?id={{x.technology_id}}" class="badge badge-pill badge-info text-uppercase"><i class="fas fa-tag"></i>{{x.technology_name}}</a>
                         </div>
 
                         <div class="text">
-                            <span>{{x.technology_note}}</span>
+                            <span style="text-overflow: ellipsis; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; display: -webkit-box;">{{x.technology_note}}</span>
                         </div>
                         <div class="row">
                             <div class="col-xl-5">
@@ -83,7 +74,7 @@
                             </div>
                             <div class="col-xl-7">
 
-                                <p class="text-left text-muted mb-0" style="font-size:12px;font-family:Arial">{{x.technology_popular}} nổi tiếng </p>
+                                <p class="text-left text-muted mb-0" style="font-size:12px;font-family:Arial">{{x.technology_popular}} nổi bật </p>
                             </div>
                         </div>
                     </div>

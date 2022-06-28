@@ -3896,7 +3896,9 @@
     <Content Include="Image\Users\Girl.png" />
     <Content Include="Image\Users\Man.png" />
     <Content Include="Image\Users\security.png" />
+    <Content Include="Image\Users\Untitled-1.png" />
     <Content Include="Image\Users\user.png" />
+    <Content Include="Image\Users\vuatiengviet.jpg" />
     <Content Include="Models\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>

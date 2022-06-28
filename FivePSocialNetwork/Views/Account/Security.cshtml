@@ -65,7 +65,7 @@
                 <div class="col-xl-12">
                     <u class="text-black">Bổ xung email và số điện thoại để bảo mật tài khoản của bạn ( lấy lại tài khoản khi bạn quên ).</u>
                 </div>
-                <div class="col-xl-9 mt-3">
+                <div class="col-xl-8 mt-3">
                     <div class="row text-black">
                         <div class="col-xl-7 text-black">
                             <a data-toggle="collapse" href="#collapseExampleEmail" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -117,7 +117,7 @@
                             {
                                 @:Đã xác thực.
                             }
-                            else if((user.user_phone != null ||user.user_phone != "")&& user.user_verifyPhoneNumber == false)
+                            else if ((user.user_phone != null || user.user_phone != "") && user.user_verifyPhoneNumber == false)
                             {
                                 <a href="@Url.Action("NumberPhoneVerification","Account")" class="btn btn-link"><span style="color:#fb577a">* Xác thực.</span></a>
                             }
@@ -158,7 +158,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xl-9">
+                        <div class="col-xl-12">
                             Đăng nhập 2 lớp :&nbsp;&nbsp;&nbsp;
 
                             @if (user.user_loginAuthentication == true && (user.user_phone != null || user.user_phone != "" || user.user_email != null) && (user.user_verifyPhoneNumber == true || user.user_emailAuthentication == true))
@@ -169,7 +169,7 @@
                                 </label>
                                 <span id="status">Bật.</span>
                             }
-                            else if (user.user_loginAuthentication == false && (user.user_phone != null || user.user_phone != "" ||user.user_email != null) && (user.user_verifyPhoneNumber == true || user.user_emailAuthentication == true))
+                            else if (user.user_loginAuthentication == false && (user.user_phone != null || user.user_phone != "" || user.user_email != null) && (user.user_verifyPhoneNumber == true || user.user_emailAuthentication == true))
                             {
                                 <label class="custom-toggle">
                                     <input type="checkbox" onclick="CheckAuthentication()" ng-click="changeAuthentication()" />
@@ -185,7 +185,7 @@
                                 <span style="color:#fb577a">* Bạn phải xác thực email hoặc số điện thoại mới sử dụng được chức năng này!</span>
                             }
                         </div>
-                        <div class="col-xl-8 mt-2">
+                        <div class="col-xl-12 mt-2">
                             Bảo vệ tài khoản :&nbsp;&nbsp;&nbsp;
                             @if (user.user_SecurityAccount == true && (user.user_phone != null || user.user_phone != "") && user.user_verifyPhoneNumber == true)
                             {
@@ -217,32 +217,33 @@
                             <div>( Đổi mật khẩu, số điện thoại, email hệ thống sẽ gửi xác nhận về sdt của bạn.)</div>
                         </div>
                     </div>
+                    <div class="col-xl-12">
+                        <div class="title text-black mt-4" style="transform:translateX(-13px)">
+                            <i class="fas fa-location-arrow"></i> Danh sách địa chỉ IP đăng nhập gần đây ( Xác thực email và số điện thoại để hệ thống gửi thông tin về cho bạn.)
+                        </div>
+                        @{
+                            List<User_IP> user_IPs = db.User_IP.Where(n => n.user_id == user_id).OrderByDescending(n => n.userIP_dateLogin).ToList();
+                        }
+                        <div class="row mt-2">
+                            <div class="col-xl-9 card" style="height: 200px;">
+                                @foreach (var item in user_IPs)
+                                {
+                                    <div>IP : @item.userIP_IP &nbsp;&nbsp;&nbsp;/ Ngày đăng nhập : @item.userIP_dateLogin</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-xl-3">
+                <div class="col-xl-4">
                     <div class="row justify-content-center">
-                        <div class="col-xl-12">
+                        <div class="col-xl-12 text-center">
                             <a href="@Url.Action("PageUser","UserManagement")">
-                                <img src="~/Image/Users/security.png" class="rounded-circle w-50 h-77" />
+                                <img src="https://cdn.viettel.com.vn/media/viettel/original_images/An_ninh_mang-2.png" class="rounded-circle" style="width: 270px; height: 270px"/>
                             </a>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-12">
-                    <div class="title text-black">
-                        <i class="fas fa-location-arrow"></i> Danh sách địa chỉ IP đăng nhập gần đây ( Xác thực email và số điện thoại để hệ thống gửi thông tin về cho bạn.)
-                    </div>
-                    @{ 
-                        List<User_IP> user_IPs = db.User_IP.Where(n => n.user_id == user_id).OrderByDescending(n=>n.userIP_dateLogin).ToList();
-                    }
-                    <div class="row">
-                        <div class="col-xl-9 card" style="height: 200px;overflow: scroll;">
-                            @foreach(var item in user_IPs)
-                            {
-                                <div>IP : @item.userIP_IP &nbsp;&nbsp;&nbsp;/ Ngày đăng nhập : @item.userIP_dateLogin</div>
-                            }
-                        </div>
-                    </div>
-                </div>
+               
             </div>
         </div>
     </div>
