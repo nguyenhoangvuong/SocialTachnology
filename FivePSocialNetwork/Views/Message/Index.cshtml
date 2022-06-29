@@ -28,7 +28,7 @@
                 </div>
                 <div class="srch_bar">
                     <div class="stylish-input-group">
-                        <input type="text" class="search-bar" ng-model="txtSearch" placeholder="Tìm bạn">
+                        <input type="text" class="search-bar" ng-model="txtSearch" placeholder="Tìm bạn ..">
                         <span class="input-group-addon">
                             <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
                         </span>
@@ -65,7 +65,7 @@
         <div class="mesgs">
             <div class="msg_history" >
                 <div class="scrolling-element-inside" style="display: none" id="statusReply">
-                    <img src="~/Image/Users/DangSoan.gif" style="width:30%;height:50px" />
+                    <img src="~/Image/Users/DangSoan.gif" style="width:40px;height:40px;border-radius:50%" />
                 </div>
                 <div id="contentMsg" class="scrolling-element-inside"></div>
             </div>
@@ -161,20 +161,16 @@
 <script type="text/javascript">
     // real time tin nhắn
     $(function () {
-
         // Proxy created on the fly
         var cus = $.connection.hubMess;
-
         // Declare a function on the job hub so the server can invoke it
         cus.client.displayChat = function () {
             getData5();
         };
-
         // Start the connection
         $.connection.hub.start();
         getData5();
     });
-
     function getData5() {
         var $tbl = $('#contentMsg');
         $.ajax({
@@ -190,20 +186,19 @@
                                 '<div class="outgoing_msg">'
                                 + '<div class= "sent_msg"><p>'
                                 + model.message_content + '</p><span class="time_date"> '
-                                + model.messageRecipients_status + model.message_dateSend + '   <a href="#" onclick="MessageRetrieval(' + model.message_id+')">Thu hồi</a>'
+                                + model.messageRecipients_status + ' _______ ' + model.message_dateSend + ' | <a href="#" onclick="MessageRetrieval(' + model.message_id+')">Thu hồi</a>'
                                 + '</span></div ></div >'
                             );
                     }
                     else {
                         $tbl.append
                             (
-                                '<div class="incoming_msg"><div class= "incoming_msg_img"> <img src="/Image/Users/' + model.messageSender_avatar +'"> </div><div class="received_msg"><div class="received_withd_msg"><p>'
+                                '<div class="incoming_msg"><div class= "incoming_msg_img"> <img src="/Image/Users/' + model.messageSender_avatar +'" style="width:40px;height:40px;border-radius:50%;object-fit:cover"> </div><div class="received_msg"><div class="received_withd_msg"><p>'
                                 + model.message_content + '</p><span class="time_date">'
                                 + model.message_dateSend
                                 + '</span></div></div>'
                             );
                     }
-
                 });
             }
         });
@@ -214,25 +209,20 @@
             type: 'GET',
         });
     }
-
 </script>
 <script type="text/javascript">
     // real time danh sách bạn bè
     $(function () {
-
         // Proxy created on the fly
         var cus = $.connection.listFriendInMess;
-
         // Declare a function on the job hub so the server can invoke it
         cus.client.displayChat = function () {
             getData8();
         };
-
         // Start the connection
         $.connection.hub.start();
         getData8();
     });
-
     function getData8() {
         var $tbl = $('#listFiend');
         $.ajax({
@@ -249,11 +239,11 @@
                                     (
                                         '<div class="chat_list" style="background-color:#eff0f1">'
                                         + '<div class= "chat_people" >'
-                                        + ' <div class="chat_img"> <img src="/Image/Users/' + model.user_avatar + '" alt="sunil"> </div>'
+                                        + ' <div class="chat_img"> <img src="/Image/Users/' + model.user_avatar + '" alt="sunil" > </div>'
                                         + ' <div class="chat_ib">'
                                         + ' <h5><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + '  <i class="fas fa-circle" style="font-size:6px"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
-                                        + '  <p style="color:black;font-family:Arial">'
-                                        + model.message  + '<span style="float:right">' + model.messageRecipients_status + '</span>'
+                                        + '  <p style="font-weight:800;color:black;font-family:Arial">'
+                                        + model.message + ' | ' + model.messageRecipients_status
                                         + '   </p>'
                                         + '  </div>'
                                         + '  </div>'
@@ -268,8 +258,8 @@
                                         + ' <div class="chat_img"> <img src="/Image/Users/' + model.user_avatar + '" alt="sunil"> </div>'
                                         + ' <div class="chat_ib">'
                                         + ' <h5><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + '  <i class="fas fa-circle" style="font-size:6px"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
-                                        + '  <p style="color:black;font-family:Arial">'
-                                        + model.message + ' <span id="timeSendMess' + i + '">' + model.hoursSend + '</span> phút trước.'
+                                        + '  <p style="font-weight:800;color:black;font-family:Arial">'
+                                        + model.message + ' --- <span id="timeSendMess' + i + '">' + model.hoursSend + '</span> phút trước.'
                                         + '   </p>'
                                         + '  </div>'
                                         + '  </div>'
@@ -281,10 +271,8 @@
                         }
                         else {
                             if (model.hoursSend == 66) {
-
                             }
                             else {
-
                             }
                             $tbl.append
                                 (
@@ -293,8 +281,8 @@
                                     + ' <div class="chat_img"> <img src="/Image/Users/' + model.user_avatar + '" alt="sunil"> </div>'
                                     + ' <div class="chat_ib">'
                                     + ' <h5><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + '  <i class="fas fa-circle" style="font-size:6px;color:#1ec72c"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
-                                    + '  <p style="color:black;font-family:Arial">'
-                                    + model.message + ' <span id="timeSendMess' + i + '">' + model.hoursSend + '</span> phút trước.' + '<span style="float:right">' + model.messageRecipients_status + '</span>'
+                                    + '  <p style="font-weight:800;color:black;font-family:Arial">'
+                                    + model.message + ' --- <span id="timeSendMess' + i + '">' + model.hoursSend + '</span> phút trước.' + ' | ' + model.messageRecipients_status
                                     + '   </p>'
                                     + '  </div>'
                                     + '  </div>'
@@ -303,7 +291,6 @@
                             var value = model.hoursSend;
                             setInterval(function () { document.getElementById('timeSendMess' + i).innerHTML = value++; }, 60000);
                         }
-
                     }
                     else {
                         if (model.user_statusOnline == false) {
@@ -316,7 +303,7 @@
                                         + ' <div class="chat_ib">'
                                         + ' <h5><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + ' <i class="fas fa-circle" style="font-size:6px"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
                                         + '  <p>'
-                                        + model.message + ' ' + model.messageRecipients_status
+                                        + model.message + ' | ' + model.messageRecipients_status
                                         + '   </p>'
                                         + '  </div>'
                                         + '  </div>'
@@ -332,7 +319,7 @@
                                         + ' <div class="chat_ib">'
                                         + ' <h5><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + ' <i class="fas fa-circle" style="font-size:6px"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
                                         + '  <p>'
-                                        + model.message + ' <span id="timeSendMess' + i + '">' + model.hoursSend + '</span> phút trước.' + ' ' + model.messageRecipients_status
+                                        + model.message + ' --- <span id="timeSendMess' + i + '">' + model.hoursSend + '</span> phút trước.' + ' | ' + model.messageRecipients_status
                                         + '   </p>'
                                         + '  </div>'
                                         + '  </div>'
@@ -341,7 +328,6 @@
                                 var value = model.hoursSend;
                                 setInterval(function () { document.getElementById('timeSendMess' + i).innerHTML = value++; }, 60000);
                             }
-
                         }
                         else {
                             if (model.hoursSend == 66) {
@@ -353,7 +339,7 @@
                                         + ' <div class="chat_ib">'
                                         + ' <h5><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + '   <i class="fas fa-circle" style="font-size:6px;color:#1ec72c"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
                                         + '  <p>'
-                                        + model.message + ' ' + model.messageRecipients_status
+                                        + model.message + ' | ' + model.messageRecipients_status
                                         + '   </p>'
                                         + '  </div>'
                                         + '  </div>'
@@ -364,12 +350,12 @@
                                 $tbl.append
                                     (
                                         '<div class="chat_list ">'
-                                        + '<div class= "chat_people d-flex align-item-center">'
+                                        + '<div class= "chat_people" >'
                                         + ' <div class="chat_img"> <img src="/Image/Users/' + model.user_avatar + '" alt="sunil"> </div>'
                                         + ' <div class="chat_ib">'
-                                        + ' <h5 style="margin-bottom:0 !important;margin-top:8px"><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + '   <i class="fas fa-circle" style="font-size:6px;color:#1ec72c"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
+                                        + ' <h5><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + '   <i class="fas fa-circle" style="font-size:6px;color:#1ec72c"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
                                         + '  <p>'
-                                        + model.message + ' <span id="timeSendMess' + i + '">' + model.hoursSend + '</span> phút trước.' + '<span style="float:right">' + model.messageRecipients_status + '</span>'
+                                        + model.message + ' --- <span id="timeSendMess' + i + '">' + model.hoursSend + '</span> phút trước.' + ' | ' + model.messageRecipients_status
                                         + '   </p>'
                                         + '  </div>'
                                         + '  </div>'
@@ -388,20 +374,16 @@
 <script type="text/javascript">
     // real time tin nhắn
     $(function () {
-
         // Proxy created on the fly
         var cus = $.connection.statusFriendInMess;
-
         // Declare a function on the job hub so the server can invoke it
         cus.client.displayChat = function () {
             getData9();
         };
-
         // Start the connection
         $.connection.hub.start();
         getData9();
     });
-
     function getData9() {
         var $tbl = $('#statusFriend');
         $.ajax({
@@ -423,10 +405,8 @@
                                 ' /  Đang hoạt động <i class="fas fa-circle" style="font-size:6px;color:#1ec72c"></i>'
                             );
                     }
-
                 });
             }
         });
     }
-
 </script>

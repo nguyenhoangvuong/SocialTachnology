@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FivePSocialNetwork.Models;
-using FivePSocialNetwork.Models.Json;
 
 namespace FivePSocialNetwork.Controllers
 {
@@ -24,11 +23,11 @@ namespace FivePSocialNetwork.Controllers
             // khi tồn tại cookies
             int user_id = int.Parse(Request.Cookies["user_id"].Value.ToString());
             Question check = db.Questions.SingleOrDefault(n => n.user_id == user_id && n.question_id == id);
-            if(id == null)
+            if (id == null)
             {
                 return View();
             }
-            else if(check == null)
+            else if (check == null)
             {
                 return View();
             }
@@ -40,44 +39,28 @@ namespace FivePSocialNetwork.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AllowAnonymous]
         [ValidateInput(false)]
-        public ActionResult AddPost(FormCollection collection) {
-
-            var Tile = collection["post_title"];
-            var Des = collection["Post_content"];
-            try
+        public string CheckQuestionContent(string ContentQuestion)
+        {
+            List<string> listTucTieu = new List<string>()
             {
-                List<string> Img = (List<string>)Session["Img"];
-                // khi tồn tại cookies
-                int user_id = int.Parse(Request.Cookies["user_id"].Value.ToString());
-                if (user_id > 0)
+                "cặc",
+                "mẹ",
+                "lồn",
+                "thằng ml",
+                "thằng ngu dốt",
+                "óc chó"
+            };
+            foreach (var item in listTucTieu)
+            {
+                if (ContentQuestion.Contains(item))
                 {
-                    Post post = new Post()
-                    {
-                        post_content = Des,
-                        post_title = Tile,
-                        post_image = string.Join(",", Img),
-                        post_admin_recycleBin = false,
-                        post_activate = false,
-                        post_totalLike = 0,
-                        post_userStatus = true,
-                        user_id = user_id,
-                        post_view = 0,
-                        post_dateCreate=DateTime.Now,
-                        post_recycleBin=false,
-                       
-                    };
-                    db.Posts.Add(post);
-                    db.SaveChanges();
-
+                    return "yes";
                 }
-               
             }
-            catch { }
-            return RedirectToAction("Post", "View");
-            } 
+            return "no";
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
@@ -93,7 +76,7 @@ namespace FivePSocialNetwork.Controllers
             int user_id = int.Parse(Request.Cookies["user_id"].Value.ToString());
             //tách chuỗi thẻ tags
             string[] tagsQuestion = strTagsQuestion.Split(',');
-            
+
             if (question.question_id != 0)
             {
                 Question check = db.Questions.SingleOrDefault(n => n.user_id == user_id && n.question_id == question.question_id);
@@ -105,7 +88,7 @@ namespace FivePSocialNetwork.Controllers
                 User user = db.Users.Find(user_id);
                 //công nghệ
                 List<Teachnology_Question> teachnology_Questions = db.Teachnology_Question.Where(n => n.question_id == question.question_id).ToList();
-                question1.question_keywordSearch = question.question_title + question.question_content+ user.user_firstName + user.user_lastName;
+                question1.question_keywordSearch = question.question_title + question.question_content + user.user_firstName + user.user_lastName;
                 if (teachnology_Questions == null)
                 {
                     foreach (var item in technologyQuestion)
@@ -258,9 +241,10 @@ namespace FivePSocialNetwork.Controllers
             }
             else if (question.question_id == 0)
             {
+
                 User user = db.Users.Find(user_id);
                 //lưu tỉm kiếm
-                question.question_keywordSearch = question.question_content + question.question_title+ user.user_firstName + user.user_lastName;
+                question.question_keywordSearch = question.question_content + question.question_title + user.user_firstName + user.user_lastName;
                 foreach (var item in technologyQuestion)
                 {
                     // lưu tên công nghệ
@@ -274,7 +258,7 @@ namespace FivePSocialNetwork.Controllers
                         question_id = question.question_id,
                         technology_id = item,
                         teachnologyQuestion_recycleBin = false
-                        
+
                     };
                     db.Teachnology_Question.Add(tp);
                 }
@@ -308,7 +292,7 @@ namespace FivePSocialNetwork.Controllers
                 db.Questions.Add(question);
                 db.SaveChanges();
                 //Tự đánh dấu để nhận thông báo cho bài viết của mình
-                Question lastQuestion = db.Questions.Where(n => n.user_id == user_id).OrderByDescending(n=>n.question_dateCreate).FirstOrDefault();
+                Question lastQuestion = db.Questions.Where(n => n.user_id == user_id).OrderByDescending(n => n.question_dateCreate).FirstOrDefault();
                 db.Show_Activate_Question.Add(new Show_Activate_Question
                 {
                     showActivateQ_dateCreate = DateTime.Now,
@@ -343,12 +327,12 @@ namespace FivePSocialNetwork.Controllers
                 }
                 // Thông báo cho user theo dõi mình
                 List<Friend> friends = db.Friends.Where(n => ((n.userRequest_id == user_id && n.friend_follow == true) || (n.userResponse_id == user_id && n.friend_follow2_Response == true)) && n.friend_status == true).ToList();
-                if(friends != null)
+                if (friends != null)
                 {
                     List<Friend> tempFriend = new List<Friend>();
-                    foreach(var item in friends)
+                    foreach (var item in friends)
                     {
-                        if(item.userRequest_id != user_id)
+                        if (item.userRequest_id != user_id)
                         {
                             tempFriend.Add(new Friend
                             {
@@ -366,21 +350,21 @@ namespace FivePSocialNetwork.Controllers
                             });
                         }
                     }
-                    foreach(var item in tempFriend)
+                    foreach (var item in tempFriend)
                     {
                         notification.receiver_id = item.userResponse_id;
                         notification.impactUser_id = item.userRequest_id;
                         notification.question_id = lastQuestion.question_id;
                         notification.notification_recycleBin = false;
                         notification.notification_dateCreate = DateTime.Now;
-                        notification.notification_content = user.user_firstName + user.user_lastName + " vừa đặt câu hỏi: "+question.question_title;
+                        notification.notification_content = user.user_firstName + user.user_lastName + " vừa đặt câu hỏi: " + question.question_title;
                         notification.notification_status = false;
                         db.Notifications.Add(notification);
                         db.SaveChanges();
                     }
 
                 }
-                return RedirectToAction("IndexCenter", "Center");
+                return View(question);
             }
             else
             {
