@@ -47,6 +47,19 @@ namespace FivePSocialNetwork.Controllers
                     db.Rate_Post.Add(Post);
                     db.SaveChanges();
                 }
+                try
+                {
+                    var Id = Session["ID"];
+                    if (Id != null)
+                    {
+                        Session["ID"] = null;
+                        return RedirectToAction("PostDetail/" + id);
+                    }
+                }
+                catch
+                {
+
+                }
             }
             catch { }
             return RedirectToAction("Post");
@@ -55,6 +68,7 @@ namespace FivePSocialNetwork.Controllers
 
         public ActionResult PostDetail(int? id)
         {
+            Session["ID"]= id;
             int user_id = int.Parse(Request.Cookies["user_id"].Value.ToString());
             ViewBag.UseId = user_id;
             var Post = db.Posts.Where(x => x.post_id == id).FirstOrDefault();
@@ -64,12 +78,12 @@ namespace FivePSocialNetwork.Controllers
         }
             public ActionResult DistLike(int? id)
         {
+            
             int user_id = int.Parse(Request.Cookies["user_id"].Value.ToString());
             try
             {
              
-               // PostD.post_totalDislike++;
-                db.SaveChanges();
+             
                 var Post = db.Rate_Post.Where(x => x.post_id == id && x.user_id == user_id).FirstOrDefault();
                 if (Post != null && Post.ratePost_rateStatus==false)
                 {
@@ -98,8 +112,23 @@ namespace FivePSocialNetwork.Controllers
                     db.Rate_Post.Add(Post);
                     db.SaveChanges();
                 }
+              
+            try
+                {
+                    var Id = Session["ID"];
+                    if (Id != null)
+                    {
+                        Session["ID"]=null;
+                        return RedirectToAction("PostDetail/" + id);
+                    }
+                }
+                catch
+                {
+
+                }
             }
             catch { }
+
             return RedirectToAction("Post");
         }
         // danh sách Menber
@@ -147,10 +176,19 @@ namespace FivePSocialNetwork.Controllers
         {
             // khi tồn tại cookies
             // khi tồn tại cookies
-            //int user_id = int.Parse(Request.Cookies["user_id"].Value.ToString());
-            //ViewBag.UseId = user_id;
+            int user_id = int.Parse(Request.Cookies["user_id"].Value.ToString());
+           ViewBag.UseId = user_id;
+            Session["ID"] = null;
                 return View(db.Posts.Where(x=>x.post_activate!=false && x.post_recycleBin!=true && x.post_admin_recycleBin==true ).OrderBy(x=>x.post_id).ToList());
         }
+        public ActionResult DeletePost(long? id)
+        {
+            var Post = db.Posts.Where(x => x.post_id == id).FirstOrDefault();
+            Post.post_recycleBin=true;
+            db.SaveChanges();
+            return RedirectToAction("ManagementPost", "UserManagement");
+        }
+        
         // ------------------------------------------------danh sách bài viết------------------------------------------------
         public JsonResult ListPost()
         {
