@@ -16,6 +16,14 @@ namespace FivePSocialNetwork.Areas.Admin.Controllers
         {
             return View(db.Posts.Where(x => x.post_recycleBin != true).OrderBy(x=>x.post_admin_recycleBin).OrderByDescending(x => x.post_id).ToList());
         }
+        public ActionResult Delete(int id)
+        {
+            Post provincial = db.Posts.Find(id);
+            provincial.post_recycleBin= true;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        
         // GET: Admin/Posts
         public ActionResult Active(int ? id)
         {

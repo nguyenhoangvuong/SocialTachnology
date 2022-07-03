@@ -206,10 +206,31 @@
 
 </div>
     <script>
+        $.fn.form.settings.rules.checkContent = function (value, fieldIdentifiers) {
+            let isCheck = false;
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "/Question/checkSentiment",
+                data: "input=" + value,
+                dataType: "html",
+                success: function (msg) {
+                    //If username exists, set response to true
+                    console.log(msg);
+                    if (msg === "yes") {
+                        isCheck = false;
+                    } else {
+                        isCheck = true;
+                    }
+                }
+            });
+            if (isCheck) {
+                return true;
+            }
+            return false;
+        };
 
- 
 
-      
         function readURL(input) {
             var fileUpload = $("#files").get(0);
             var files = fileUpload.files;
@@ -254,11 +275,19 @@
                         rules: [
                             {
                                 type: 'empty',
-                                prompt: 'Vui lòng nhập tiêu đề!'
+                                prompt: 'Vui lòng nhập tiêu đề 2!'
                             }
                         ]
                     },
-                   
+                    Post_content: {
+                        identifier: 'Post_content',
+                        rules: [
+                            {
+                                type: 'checkContent',
+                                prompt: 'Nội dung không được trống và không được dùng từ ngữ thô tục !'
+                            }
+                        ]
+                    }
                 },
                 inline: true,
                 on: 'blur'

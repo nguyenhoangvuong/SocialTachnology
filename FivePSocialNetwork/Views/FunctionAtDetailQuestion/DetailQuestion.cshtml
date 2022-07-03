@@ -302,7 +302,7 @@
                                             </form>
                                         </center>
                                         <!--show hoạt động
-                                -->
+                                        -->
                                         <center>
                                             <form action="@Url.Action("ShowActivateQuestion", "FunctionAtDetailQuestion")" method="post" class="changSizeButtonRatePost">
                                                 <input type="hidden" name="question_id" value="@Model.question_id" />
@@ -633,6 +633,13 @@
             </div>
         </footer>
     </div>
+    @if (Session["detectSentiment"] != null)
+    {
+        <script>
+            alert('Phát hiện có từ ngữ thô tục. Vui lòng kiểm tra lại !');
+        </script>
+        Session["detectSentiment"] = null;
+    }
     @if (Session["doneReply"] != null)
     {
         <script>
@@ -728,30 +735,57 @@
             document.getElementById("imgRateQuestionT").style.color = "orangered";
         }
     }
-    function btnRateQuestionF() {
-        if (document.getElementById("imgRateQuestionT").style.color == 'orangered') {
-            document.getElementById("totalRateQuestion").innerText = Number(document.getElementById("totalRateQuestion").innerText) - 2;
-            document.getElementById("imgRateQuestionF").style.color = "orangered";
-            document.getElementById("imgRateQuestionT").style.color = "#172b4d";
+        //đổi màu các nút vow
+        function btnRateQuestionT() {
+
+            if (document.getElementById("imgRateQuestionF").style.color == 'orangered') {
+                document.getElementById("totalRateQuestion").innerText = Number(document.getElementById("totalRateQuestion").innerText) + 1;
+                document.getElementById("imgRateQuestionT").style.color = "orangered";
+                document.getElementById("imgRateQuestionF").style.color = "#172b4d";
+
+            }
+            else if (document.getElementById("imgRateQuestionT").style.color == 'orangered') {
+
+                document.getElementById("totalRateQuestion").innerText = Number(document.getElementById("totalRateQuestion").innerText) - 1;
+                document.getElementById("imgRateQuestionT").style.color = "#172b4d";
+            }
+            else {
+                document.getElementById("totalRateQuestion").innerText = Number(document.getElementById("totalRateQuestion").innerText) + 1;
+                document.getElementById("imgRateQuestionT").style.color = "orangered";
+            }
         }
-        else if (document.getElementById("imgRateQuestionF").style.color == 'orangered') {
-            document.getElementById("totalRateQuestion").innerText = Number(document.getElementById("totalRateQuestion").innerText) + 1;
-            document.getElementById("imgRateQuestionF").style.color = "#172b4d";
+        function btnRateQuestionF() {
+
+            if (Number(document.getElementById("totalRateQuestion").innerText) > 0) {
+                if (document.getElementById("imgRateQuestionF").style.color == 'orangered') {
+                    document.getElementById("totalRateQuestion").innerText = Number(document.getElementById("totalRateQuestion").innerText) + 1;
+                  //  document.getElementById("imgRateQuestionT").style.color = "orangered";
+                    document.getElementById("imgRateQuestionF").style.color = "#172b4d";
+
+                }
+                else if (document.getElementById("imgRateQuestionT").style.color == 'orangered') {
+
+                    document.getElementById("totalRateQuestion").innerText = Number(document.getElementById("totalRateQuestion").innerText) - 1;
+                    document.getElementById("imgRateQuestionT").style.color = "#172b4d";
+                    document.getElementById("imgRateQuestionF").style.color = "#orangered";
+                }
+                //else {
+                //    document.getElementById("totalRateQuestion").innerText = Number(document.getElementById("totalRateQuestion").innerText) + 1;
+                //    document.getElementById("imgRateQuestionF").style.color = "orangered";
+                //}
+
+            }
+
         }
-        else {
-            document.getElementById("totalRateQuestion").innerText = Number(document.getElementById("totalRateQuestion").innerText) - 1;
-            document.getElementById("imgRateQuestionF").style.color = "orangered";
+        //Đổi màu nút tick post
+        function btnTickQuestion() {
+            if (document.getElementById("imgTickQuestion").style.color == 'orangered') {
+                document.getElementById("imgTickQuestion").style.color = '#172b4d';
+                document.getElementById("totalTickQuestion").innerText = Number(document.getElementById("totalTickQuestion").innerText) - 1;
+            }
+            else {
+                document.getElementById("imgTickQuestion").style.color = 'orangered';
+                document.getElementById("totalTickQuestion").innerText = Number(document.getElementById("totalTickQuestion").innerText) + 1;
+            }
         }
-    }
-    //Đổi màu nút tick post
-    function btnTickQuestion() {
-        if (document.getElementById("imgTickQuestion").style.color == 'orangered') {
-            document.getElementById("imgTickQuestion").style.color = '#172b4d';
-            document.getElementById("totalTickQuestion").innerText = Number(document.getElementById("totalTickQuestion").innerText) - 1;
-        }
-        else {
-            document.getElementById("imgTickQuestion").style.color = 'orangered';
-            document.getElementById("totalTickQuestion").innerText = Number(document.getElementById("totalTickQuestion").innerText) + 1;
-        }
-    }
     </script>

@@ -87,11 +87,17 @@ img {
     width: 11%;
 }
 
-.chat_ib {
-    float: left;
-    padding: 0 0 0 15px;
-    width: 88%;
-}
+    .chat_img img{
+        width:50px;
+        height:50px;
+        border-radius:50%;
+    }
+
+    .chat_ib {
+        float: left;
+        padding: 0 0 0 15px;
+        width: 88%;
+    }
 
 .chat_people {
     overflow: hidden;
@@ -104,8 +110,8 @@ img {
 }
 
 .inbox_chat {
+    overflow: hidden;
     height: 550px;
-    overflow-y: scroll;
 }
 
 .active_chat {

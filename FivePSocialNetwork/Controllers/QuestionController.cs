@@ -1,9 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using FivePSocialNetwork.Models;
+using FivePSocialNetwork.Models.Json;
+using Newtonsoft.Json;
 
 namespace FivePSocialNetwork.Controllers
 {
@@ -40,16 +46,41 @@ namespace FivePSocialNetwork.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
+        public async Task<string> checkSentiment(string input)
+        {
+            if (input == "")
+            {
+                return "yes";
+            }
+            HttpClient client = new HttpClient();
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(
+                new { col0 = Regex.Replace(input, "<.*?>", String.Empty) });
+            var data = new System.Net.Http.StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("https://utc2api.azurewebsites.net/predict", data);
+            var responseString = await response.Content.ReadAsStringAsync();
+            var deserialized = JsonConvert.DeserializeObject<OutputFromAPI>(responseString);
+            if (deserialized.prediction == 0 && deserialized.score[0] >= 0.65)
+            {
+                return "yes";
+            }
+            return "no";
+        }
+
+
+        [HttpPost]
+        [ValidateInput(false)]
         public string CheckQuestionContent(string ContentQuestion)
         {
             List<string> listTucTieu = new List<string>()
             {
-                "cặc",
-                "mẹ",
-                "lồn",
-                "thằng ml",
-                "thằng ngu dốt",
-                "óc chó"
+                "cặc","mẹ","lồn","thằng ml","thằng ngu dốt","óc chó","Địt cụ", "con chó cái",  "tên khốn", "thằng hâm", "thằng ngáo","Mẹ mày",
+                "địt mẹ", "mẹ mày", "hãm lồn", "ngu lồn", "vãi lồn", "ngáo chó", "lồn mẹ mày", "vãi cức", "con đĩ mẹ mày", "dell mẹ mày", "tổ cha mày",
+                "mã bà mày", "đmm điên à", "đồ khùng", "con điên", "má nó", "chơi chó", "con chó", "đéo mẹ",
+                "chán vl", "xạo lồn", "thằng lồn", "óc chó", "đồ ngu", "biến đi", "cút đi", "đồ keo kiệt", "mẹ kiếp", "thằng vô lại", "khốn kiếp",
+                "đồ hèn nhát", "óc lợn, đồ tạp chủng", "đồ đần độn", "câm mồm", "đồ tồi", "đồ hèn nhát", "thằng hâm", "đồ chó đẻ", "đần độn", "khốn nạn",
+                "Rẻ rách", "ngớ ngẫn", "ngu ngốc", "vô dụng", "chết tiệc", "ngu như lợn", "ông cố tổ cha mày", "dkm","cc","cl nhé","óc tôm","đỉ chó","fuck","fuck you","bitch","ngựa vl",
+                "ăn gì dốt vậy","đéo chỉ","dmm","dm","tổ sư nhà m","xlol","mỏ thúi","dâm dục","ấu dâm","nứng à","cút con mẹ mày đi","biến chỗ khác","cút lẹ","não teo à","code ngu thế",
+                "thằng ăn bám","cu bé","á đù","nhóm rác rưởi","nhóm toàn mấy thằng ngu", "toàn mấy thằng gà"
             };
             foreach (var item in listTucTieu)
             {
@@ -61,6 +92,46 @@ namespace FivePSocialNetwork.Controllers
             return "no";
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        [ValidateInput(false)]
+        public ActionResult AddPost(FormCollection collection)
+        {
+
+            var Tile = collection["post_title"];
+            var Des = collection["Post_content"];
+            try
+            {
+                List<string> Img = (List<string>)Session["Img"];
+                // khi tồn tại cookies
+                int user_id = int.Parse(Request.Cookies["user_id"].Value.ToString());
+                if (user_id > 0)
+                {
+                    Post post = new Post()
+                    {
+                        post_content = Des,
+                        post_title = Tile,
+                        post_image = string.Join(",", Img),
+                        post_admin_recycleBin = false,
+                        post_activate = false,
+                        post_totalLike = 0,
+                        post_userStatus = true,
+                        user_id = user_id,
+                        post_view = 0,
+                        post_dateCreate = DateTime.Now,
+                        post_recycleBin = false,
+
+                    };
+                    db.Posts.Add(post);
+                    db.SaveChanges();
+
+                }
+
+            }
+            catch { }
+            return RedirectToAction("Post", "View");
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
@@ -364,7 +435,7 @@ namespace FivePSocialNetwork.Controllers
                     }
 
                 }
-                return View(question);
+                return RedirectToAction("IndexCenter", "Center");
             }
             else
             {

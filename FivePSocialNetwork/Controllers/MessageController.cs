@@ -230,6 +230,9 @@ namespace FivePSocialNetwork.Controllers
                         {
                             if (item.userRequest_id != user_id)
                             {
+                                FivePSocialNetWorkEntities db1 = new FivePSocialNetWorkEntities();
+                                var User = db1.Users.FirstOrDefault(x => x.user_id == item.userRequest_id);
+                                item.User = User;
                                 fiterUsers.Add(new ListUsers
                                 {
                                     user_statusOnline = item.User.user_statusOnline,
@@ -245,18 +248,24 @@ namespace FivePSocialNetwork.Controllers
                             }
                             else if (item.userResponse_id != user_id)
                             {
-                                fiterUsers.Add(new ListUsers
-                                {
-                                    user_statusOnline = item.User1.user_statusOnline,
-                                    user_id = (int)item.userResponse_id,
-                                    user_firstName = item.User1.user_firstName,
-                                    user_lastName = item.User1.user_lastName,
-                                    user_vipMedal = item.User1.user_vipMedal,
-                                    user_goldMedal = item.User1.user_goldMedal,
-                                    user_silverMedal = item.User1.user_silverMedal,
-                                    user_brozeMedal = item.User1.user_brozeMedal,
-                                    user_avatar = item.User1.user_avatar
-                                });
+                                try {
+                                    FivePSocialNetWorkEntities db1 = new FivePSocialNetWorkEntities();
+                                    var User = db1.Users.FirstOrDefault(x=>x.user_id==item.userResponse_id);
+                                    item.User1 = User;
+                                    fiterUsers.Add(new ListUsers
+                                    {
+                                        user_statusOnline = item.User1.user_statusOnline,
+                                        user_id = (int)item.userResponse_id,
+                                        user_firstName = item.User1.user_firstName,
+                                        user_lastName = item.User1.user_lastName,
+                                        user_vipMedal = item.User1.user_vipMedal,
+                                        user_goldMedal = item.User1.user_goldMedal,
+                                        user_silverMedal = item.User1.user_silverMedal,
+                                        user_brozeMedal = item.User1.user_brozeMedal,
+                                        user_avatar = item.User1.user_avatar
+                                    });
+                                } catch (Exception e) { var a= e.Message; }
+                              
                             }
                         }
                         List<ListUsers> listUsers = fiterUsers.Select(n => new ListUsers
@@ -274,22 +283,25 @@ namespace FivePSocialNetwork.Controllers
                             message_status = db.Messages.OrderByDescending(m => m.message_dateSend).FirstOrDefault(m => m.messageSender_id == n.user_id).message_status,
                             message = db.Messages.OrderByDescending(m => m.message_dateSend).FirstOrDefault(m => (m.messageSender_id == n.user_id && m.messageRecipients_id == user_id)||(m.messageSender_id == user_id && m.messageRecipients_id == n.user_id)).message_content,
                             temporaryDate = (DateTime)db.Messages.OrderByDescending(m => m.message_dateSend).FirstOrDefault(m => m.messageSender_id == n.user_id).message_dateSend
-                        }).ToList();
+                        }).Distinct().ToList();
                         DateTime dateTime = DateTime.Now;
                         foreach(var item in listUsers)
                         {
-                            if(item.temporaryDate.ToShortDateString() == dateTime.ToShortDateString() && item.temporaryDate.Hour == dateTime.Hour)
-                            {
-                                item.hoursSend = dateTime.Minute - item.temporaryDate.Minute;
-                                item.message_dateSend = item.temporaryDate.ToString();
-                                db.SaveChanges();
-                            }
-                            else
-                            {
-                                item.hoursSend = 66;
-                                item.message_dateSend = item.temporaryDate.ToString();
-                                db.SaveChanges();
-                            }
+                            try {
+                                if (item.temporaryDate.ToShortDateString() == dateTime.ToShortDateString() && item.temporaryDate.Hour == dateTime.Hour)
+                                {
+                                    item.hoursSend = dateTime.Minute - item.temporaryDate.Minute;
+                                    item.message_dateSend = item.temporaryDate.ToString();
+                                    db.SaveChanges();
+                                }
+                                else
+                                {
+                                    item.hoursSend = 66;
+                                    item.message_dateSend = item.temporaryDate.ToString();
+                                    db.SaveChanges();
+                                }
+                            } catch { }
+                          
                         }
                         return Json(new { listChat = listUsers.OrderByDescending(n => n.temporaryDate) }, JsonRequestBehavior.AllowGet);
                     }

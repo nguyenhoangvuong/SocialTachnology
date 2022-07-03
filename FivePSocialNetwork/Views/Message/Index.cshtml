@@ -239,11 +239,11 @@
                                     (
                                         '<div class="chat_list" style="background-color:#eff0f1">'
                                         + '<div class= "chat_people" >'
-                                        + ' <div class="chat_img"> <img src="/Image/Users/' + model.user_avatar + '" alt="sunil" > </div>'
+                                        + ' <div class="chat_img" style="border-radius:50%;width:50px;height:50px;overflow:hidden"> <img style="border-radius:50%" src="/Image/Users/' + model.user_avatar + '" alt="sunil" > </div>'
                                         + ' <div class="chat_ib">'
-                                        + ' <h5><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + '  <i class="fas fa-circle" style="font-size:6px"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
+                                        + ' <h5 class="mb-0"><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + '  <i class="fas fa-circle" style="font-size:6px"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
                                         + '  <p style="font-weight:800;color:black;font-family:Arial">'
-                                        + model.message + ' | ' + model.messageRecipients_status
+                                        + model.message + ' ... ' + model.messageRecipients_status
                                         + '   </p>'
                                         + '  </div>'
                                         + '  </div>'
@@ -255,9 +255,9 @@
                                     (
                                         '<div class="chat_list" style="background-color:#eff0f1">'
                                         + '<div class= "chat_people" >'
-                                        + ' <div class="chat_img"> <img src="/Image/Users/' + model.user_avatar + '" alt="sunil"> </div>'
+                                        + ' <div class="chat_img" style="border-radius:50%;width:50px;height:50px;overflow:hidden"> <img style="border-radius:50%" src="/Image/Users/' + model.user_avatar + '" alt="sunil"> </div>'
                                         + ' <div class="chat_ib">'
-                                        + ' <h5><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + '  <i class="fas fa-circle" style="font-size:6px"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
+                                        + ' <h5 class="mb-0"><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + '  <i class="fas fa-circle" style="font-size:6px"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
                                         + '  <p style="font-weight:800;color:black;font-family:Arial">'
                                         + model.message + ' --- <span id="timeSendMess' + i + '">' + model.hoursSend + '</span> phút trước.'
                                         + '   </p>'
@@ -278,11 +278,11 @@
                                 (
                                     '<div class="chat_list" style="background-color:#eff0f1">'
                                     + '<div class= "chat_people" >'
-                                    + ' <div class="chat_img"> <img src="/Image/Users/' + model.user_avatar + '" alt="sunil"> </div>'
+                                    + ' <div class="chat_img" style="border-radius:50%;width:50px;height:50px;overflow:hidden"> <img style="border-radius:50%" src="/Image/Users/' + model.user_avatar + '" alt="sunil"> </div>'
                                     + ' <div class="chat_ib">'
-                                    + ' <h5><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + '  <i class="fas fa-circle" style="font-size:6px;color:#1ec72c"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
+                                    + ' <h5 class="mb-0"><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + '  <i class="fas fa-circle" style="font-size:6px;color:#1ec72c"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
                                     + '  <p style="font-weight:800;color:black;font-family:Arial">'
-                                    + model.message + ' --- <span id="timeSendMess' + i + '">' + model.hoursSend + '</span> phút trước.' + ' | ' + model.messageRecipients_status
+                                    + model.message + ' --- <span id="timeSendMess' + i + '">' + model.hoursSend + '</span> phút trước.' + ' ... ' + model.messageRecipients_status
                                     + '   </p>'
                                     + '  </div>'
                                     + '  </div>'
@@ -299,11 +299,11 @@
                                     (
                                         '<div class="chat_list ">'
                                         + '<div class= "chat_people" >'
-                                        + ' <div class="chat_img"> <img src="/Image/Users/' + model.user_avatar + '" alt="sunil"> </div>'
+                                        + ' <div class="chat_img" style="border-radius:50%;width:50px;height:50px;overflow:hidden"> <img style="border-radius:50%" src="/Image/Users/' + model.user_avatar + '" alt="sunil"> </div>'
                                         + ' <div class="chat_ib">'
-                                        + ' <h5><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + ' <i class="fas fa-circle" style="font-size:6px"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
+                                        + ' <h5 class="mb-0"><a href="/Message/Index?id=' + model.user_id + '">' + model.user_firstName + ' ' + model.user_lastName + ' <i class="fas fa-circle" style="font-size:6px"></i> ' + '</a> <span class="chat_date">' + model.message_dateSend + '</span></h5>'
                                         + '  <p>'
-                                        + model.message + ' | ' + model.messageRecipients_status
+                                        + model.message + ' ... ' + model.messageRecipients_status
                                         + '   </p>'
                                         + '  </div>'
                                         + '  </div>'

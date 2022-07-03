@@ -139,9 +139,9 @@
                                                                                             <button type="button" data-toggle="modal" data-target="#editRowModal@(item.post_id)" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
                                                                                                 <i class="fa fa-edit"></i>
                                                                                             </button>
-                                                                                            <button type="button" ng-click="recycleBinPost(@cout,@item.post_id)" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove">
+                                                                                            <a href="/Admin/Posts/Delete/@item.post_id" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove">
                                                                                                 <i class="fa fa-times"></i>
-                                                                                            </button>
+                                                                                            </a>
                                                                                         </div>
                                                                                         <!--Sửa-->
                                                                                         <div class="modal fade" id="editRowModal@(item.post_id)" tabindex="-1" role="dialog" aria-hidden="true">
@@ -218,9 +218,11 @@
      
 
         $scope.recycleBinPost = function (idx, id) {
+            console.log(idx)
             if (confirm("Bạn chắc chắn xóa bài viết này?")) {
-                $scope.filteredTodos.splice(idx, 1);
-                $http.get("/Admin/Posts/RecycleBinPost?id=" + id).then(function (response) {
+                console.log("ss");
+                //$scope.filteredTodos.splice(idx, 1);
+                $http.get("/Admin/Posts/RecycleBinPost?id=" + idx).then(function (response) {
                     // sau khi khoi phục, khôi phục lai data
                     $http.get("/Admin/Posts/RecycleBinPostJson").then(function (response) {
                         $scope.listRecycleBin = response.data;

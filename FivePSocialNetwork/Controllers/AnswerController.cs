@@ -54,6 +54,7 @@ namespace FivePSocialNetwork.Controllers
         }
         private async Task<bool> checkSentiment(string input)
         {
+            
             HttpClient client = new HttpClient();
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(
                 new { col0 = Regex.Replace(input, "<.*?>", String.Empty) });
@@ -61,12 +62,36 @@ namespace FivePSocialNetwork.Controllers
             var response = await client.PostAsync("https://utc2api.azurewebsites.net/predict", data);
             var responseString = await response.Content.ReadAsStringAsync();
             var deserialized = JsonConvert.DeserializeObject<OutputFromAPI>(responseString);
-            if (deserialized.prediction == 0 && deserialized.score[0] >= 0.7)
+            if (deserialized.prediction == 0 && deserialized.score[0] >= 0.6)
             {
                 return true;
             }
             return false;
         }
+
+        public bool CheckCommentnContent(string ContentQuestion)
+        {
+            List<string> listTucTieu = new List<string>()
+            {
+                "cặc","mẹ","lồn","thằng ml","thằng ngu dốt","óc chó","Địt cụ", "con chó cái",  "tên khốn", "thằng hâm", "thằng ngáo","Mẹ mày",
+                "địt mẹ", "mẹ mày", "hãm lồn", "ngu lồn", "vãi lồn", "ngáo chó", "lồn mẹ mày", "vãi cức", "con đĩ mẹ mày", "dell mẹ mày", "tổ cha mày",
+                "mã bà mày", "đmm điên à", "đồ khùng", "con điên", "má nó", "chơi chó", "con chó", "đéo mẹ",
+                "chán vl", "xạo lồn", "thằng lồn", "óc chó", "đồ ngu", "biến đi", "cút đi", "đồ keo kiệt", "mẹ kiếp", "thằng vô lại", "khốn kiếp",
+                "đồ hèn nhát", "óc lợn, đồ tạp chủng", "đồ đần độn", "câm mồm", "đồ tồi", "đồ hèn nhát", "thằng hâm", "đồ chó đẻ", "đần độn", "khốn nạn",
+                "Rẻ rách", "ngớ ngẫn", "ngu ngốc", "vô dụng", "chết tiệc", "ngu như lợn", "ông cố tổ cha mày", "dkm","cc","cl nhé","óc tôm","đỉ chó","fuck","fuck you","bitch","ngựa vl",
+                "ăn gì dốt vậy","đéo chỉ","dmm","dm","tổ sư nhà m","xlol","mỏ thúi","dâm dục","ấu dâm","nứng à","cút con mẹ mày đi","biến chỗ khác","cút lẹ","não teo à","code ngu thế",
+                "thằng ăn bám","cu bé","á đù","nhóm rác rưởi","nhóm toàn mấy thằng ngu", "toàn mấy thằng gà"
+            };
+            foreach (var item in listTucTieu)
+            {
+                if (ContentQuestion.Contains(item))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
@@ -82,7 +107,7 @@ namespace FivePSocialNetwork.Controllers
             int user_id = int.Parse(Request.Cookies["user_id"].Value.ToString());
             User user = db.Users.Find(user_id);
             Answer checkAnswer = db.Answers.FirstOrDefault(n => n.user_id == user_id && n.question_id == answer.question_id);
-            if (await checkSentiment(answer.answer_content))
+            if (CheckCommentnContent(answer.answer_content))
             {
                 Session["detectSentiment"] = "Phát hiện bình luận mang tính thô tục! Vui lòng thử lại";
                 return Redirect(Request.UrlReferrer.ToString());
@@ -196,7 +221,7 @@ namespace FivePSocialNetwork.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public ActionResult CreateComment([Bind(Include = "commentAnswer_id,commentAnswer_content,commentAnswer_dateCreate,commentAnswer_dateEdit,user_id,answer_id,commentAnswer_recycleBin,commentAnswer_activate,commentAnswer_userStatus")] Comment_Answer comment_Answer, int? question_id, Notification notification)
+        public async Task<ActionResult> CreateComment([Bind(Include = "commentAnswer_id,commentAnswer_content,commentAnswer_dateCreate,commentAnswer_dateEdit,user_id,answer_id,commentAnswer_recycleBin,commentAnswer_activate,commentAnswer_userStatus")] Comment_Answer comment_Answer, int? question_id, Notification notification)
         {
             //nếu ko có cookies cho về trang tất cả câu hỏi.
             if (Request.Cookies["user_id"] == null)
@@ -207,6 +232,11 @@ namespace FivePSocialNetwork.Controllers
             int user_id = int.Parse(Request.Cookies["user_id"].Value.ToString());
             User user = db.Users.Find(user_id);
             //thông báo cho người hiển thị hoạt động
+            if (await checkSentiment(comment_Answer.commentAnswer_content))
+            {
+                Session["detectSentiment"] = "Phát hiện bình luận mang tính thô tục! Vui lòng thử lại";
+                return Redirect(Request.UrlReferrer.ToString());
+            }
             List<Show_Activate_Question> show_Activate_Questions = db.Show_Activate_Question.Where(n => n.question_id == question_id).ToList();
             foreach (var item in show_Activate_Questions)
             {
